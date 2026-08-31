@@ -4,7 +4,8 @@ import tempfile
 from flask import Flask, render_template, send_file, abort, after_this_request
 
 app = Flask(__name__)
-BASE_DIR = r"c:\Users\ADMIN\Desktop\icici_2024"
+# Get the parent directory of the dashboard_app folder
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 @app.route("/")
 def index():
@@ -56,4 +57,4 @@ def download(folder_name):
     return send_file(zip_filename, as_attachment=True, download_name=f"{folder_name}.zip")
 
 if __name__ == "__main__":
-    app.run(debug=True, port=7890)
+    app.run(host="0.0.0.0",debug=True, port=7890)
