@@ -4,8 +4,9 @@ A lightweight, local Flask web application designed to serve as a dashboard for 
 
 ## Features
 
-* **Dynamic Folder Listing**: Automatically scans the base directory and lists all available subdirectories along with their total file counts.
+* **Dynamic Directory Browser**: Open any folder, inspect its child folders and files, and use breadcrumbs or the Back link to move around.
 * **On-the-Fly Zipping**: Instantly compresses requested folders into ZIP archives using Python's temporary directories and `shutil`.
+* **File Downloads**: Download individual files from any folder.
 * **Premium Glassmorphism UI**: A stunning, modern dark-mode frontend built with pure HTML and CSS (no external CSS frameworks required).
 * **Animations & Hover Effects**: Smooth UI transitions that provide a great user experience.
 
@@ -37,7 +38,8 @@ A lightweight, local Flask web application designed to serve as a dashboard for 
 1. Open a web browser and navigate to the application URL:
    [http://127.0.0.1:7890](http://127.0.0.1:7890)
 2. You will see a grid of folders from your `icici_2024` workspace.
-3. Click the **Download ZIP** button on any folder to download its contents.
+3. Click **Open folder** to browse into a directory.
+4. Click **Download ZIP** on any folder to download its complete contents, or **Download file** for an individual file.
 
 ## Project Structure
 

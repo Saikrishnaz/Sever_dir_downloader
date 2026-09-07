@@ -71,6 +71,31 @@
             animation: fadeInUp 0.8s ease-out;
         }
 
+        .toolbar {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+
+        .toolbar a, .breadcrumb a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+
+        .toolbar a:hover, .breadcrumb a:hover { color: white; }
+
+        .breadcrumb { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+
+        .file-card { border-left: 3px solid #a78bfa; }
+
+        .file-card .folder-icon { color: #c4b5fd; }
+
+        .file-card .download-btn { background: rgba(139, 92, 246, 0.75); }
+
         .folder-card {
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -278,8 +303,26 @@
         <p>Please wait while we prepare your download.</p>
     </div>
 
+    <div class="toolbar">
+        {% if parent_path is not none %}
+            <a href="{{ url_for('index', path=parent_path) }}">← Back</a>
+            <span>/</span>
+        {% endif %}
+        <div class="breadcrumb">
+            <a href="{{ url_for('index') }}">Workspace</a>
+            {% for breadcrumb in breadcrumbs %}
+                <span>/</span>
+                {% if loop.last %}
+                    <span>{{ breadcrumb.name }}</span>
+                {% else %}
+                    <a href="{{ url_for('index', path=breadcrumb.path) }}">{{ breadcrumb.name }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
     <div class="dashboard-container">
-        {% if folders %}
+        {% if folders or files %}
             {% for folder in folders %}
             <div class="folder-card" style="animation-fill-mode: both; animation-delay: {{ loop.index0 * 0.1 }}s;">
                 <div class="folder-icon">
@@ -291,13 +334,30 @@
                     <h2>{{ folder.name }}</h2>
                     <p>{{ folder.num_files }} files included</p>
                 </div>
-                <a href="{{ url_for('download', folder_name=folder.name) }}" class="download-btn" onclick="showLoading(this)">
+                <a href="{{ url_for('index', path=folder.path) }}" class="download-btn" style="margin-bottom: 0.75rem; background: rgba(59, 130, 246, 0.45);">
+                    <span>Open folder</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+                <a href="{{ url_for('download', folder_name=folder.path) }}" class="download-btn" onclick="showLoading(this)">
                     <span>Download ZIP</span>
                     <svg viewBox="0 0 24 24">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                         <polyline points="7 10 12 15 17 10"></polyline>
                         <line x1="12" y1="15" x2="12" y2="3"></line>
                     </svg>
+                </a>
+            </div>
+            {% endfor %}
+            {% for file in files %}
+            <div class="folder-card file-card" style="animation-fill-mode: both; animation-delay: {{ (folders|length + loop.index0) * 0.1 }}s;">
+                <div class="folder-icon" aria-hidden="true">📄</div>
+                <div class="folder-info">
+                    <h2>{{ file.name }}</h2>
+                    <p>File</p>
+                </div>
+                <a href="{{ url_for('download_file', file_name=file.path) }}" class="download-btn">
+                    <span>Download file</span>
+                    <span aria-hidden="true">↓</span>
                 </a>
             </div>
             {% endfor %}
